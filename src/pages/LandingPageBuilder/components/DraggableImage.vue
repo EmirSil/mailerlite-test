@@ -2,27 +2,40 @@
 import { ref, watch, onMounted } from "vue";
 import VueResizable from "vue-resizable";
 const isEditMode = ref(false);
+const emit = defineEmits(['onClone', 'onDelete', 'onEdit']);
+
+function onCloneClick() {
+    emit('onClone', { type: "image", value: tempImage.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value + 20, left: tempLeft.value + 20 });
+}
+function onEditClick() {
+    isEditMode.value = !isEditMode.value;
+    dragSelector.value = isEditMode.value ? null : ".draggable-text-wrapper";
+}
+function onDeleteClick() {
+    emit('onDelete', props.id);
+}
 
 const props = defineProps({
     height: Number,
     width: Number,
     top: Number,
     left: Number,
-    image: String
+    image: String,
+    id: Number
 })
-watch(props.height, () => {
+watch(() => props.height, () => {
     tempHeight.value = props.height
 });
-watch(props.width, () => {
+watch(() => props.width, () => {
     tempWidth.value = props.width
 })
-watch(props.top, () => {
+watch(() => props.top, () => {
     tempTop.value = props.top
 });
-watch(props.left, () => {
+watch(() => props.left, () => {
     tempLeft.value = props.left
 })
-watch(props.image, () => {
+watch(() => props.image, () => {
     tempImage.value = props.image
 })
 onMounted(() => {
@@ -37,12 +50,6 @@ const tempWidth = ref(0);
 const tempTop = ref(0);
 const tempLeft = ref(0);
 const tempImage = ref("");
-function onEditClick() {
-    isEditMode.value = !isEditMode.value;
-}
-function onDeleteClick() {
-    console.log("Deleted!");
-}
 function eHandler(data) {
     tempWidth.value = data.width;
     tempHeight.value = data.height;
@@ -52,11 +59,17 @@ function eHandler(data) {
 </script>
 
 <template>
-    <vue-resizable class="draggable-wrapper" :width="tempWidth" :height="tempHeight" dragSelector=".draggable-text-wrapper"
-        :fit-parent="true" @mount="eHandler" @resize:move="eHandler" @resize:start="eHandler" @resize:end="eHandler"
-        @drag:move="eHandler" @drag:start="eHandler" @drag:end="eHandler">
+    <vue-resizable class="draggable-wrapper" :width="tempWidth" :height="tempHeight" :top="tempTop" :left="tempLeft"
+        dragSelector=".draggable-text-wrapper" :fit-parent="true" @mount="eHandler" @resize:move="eHandler"
+        @resize:start="eHandler" @resize:end="eHandler" @drag:move="eHandler" @drag:start="eHandler" @drag:end="eHandler">
         <div class="draggable-text-wrapper"
             style="background: url('https://dummyimage.com/250x250/000/fff'); background-size: cover; background-position: center;">
+            <div
+                style="position: absolute; right: -50px; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                <font-awesome-icon @click="onCloneClick" icon="fa-solid fa-clone" style="margin-bottom: 8px;" />
+                <font-awesome-icon @click="onEditClick" icon="fa-solid fa-pencil" style="margin-bottom: 8px;" />
+                <font-awesome-icon @click="onDeleteClick" icon="fa-solid fa-trash" style="margin-bottom: 8px;" />
+            </div>
         </div>
     </vue-resizable>
 </template>
@@ -67,6 +80,7 @@ function eHandler(data) {
 
 .draggable-text-wrapper {
     height: 100%;
+    display: flex;
 }
 
 .text-styling {
