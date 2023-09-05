@@ -8,7 +8,8 @@ import {
   faArrowsUpDownLeftRight,
   faPencil,
   faTrash,
+  faClone,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faPencil, faTrash, faArrowsUpDownLeftRight);
+library.add(faPencil, faTrash, faArrowsUpDownLeftRight, faClone);
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).mount('#app');

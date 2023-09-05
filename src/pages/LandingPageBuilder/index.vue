@@ -4,7 +4,15 @@ import DraggableText from './components/DraggableText.vue';
 </script>
 
 <template>
-    <div>LandingPageBuilder</div>
-    <DraggableImage />
-    <DraggableText />
+    <div class="container">
+        <DraggableImage />
+        <DraggableText />
+    </div>
 </template>
+<style scoped>
+.container {
+    height: calc(100vh - 16px);
+    position: relative;
+    margin: 8px;
+}
+</style>
