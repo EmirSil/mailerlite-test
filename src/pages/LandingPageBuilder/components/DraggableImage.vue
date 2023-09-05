@@ -1,12 +1,42 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref, watch, onMounted } from "vue";
 import VueResizable from "vue-resizable";
 const isEditMode = ref(false);
-const textValue = ref("Draggable text component");
-const width = ref(500);
-const height = ref(200);
-const left = ref(0);
-const top = ref(0);
+
+const props = defineProps({
+    height: Number,
+    width: Number,
+    top: Number,
+    left: Number,
+    image: String
+})
+watch(props.height, () => {
+    tempHeight.value = props.height
+});
+watch(props.width, () => {
+    tempWidth.value = props.width
+})
+watch(props.top, () => {
+    tempTop.value = props.top
+});
+watch(props.left, () => {
+    tempLeft.value = props.left
+})
+watch(props.image, () => {
+    tempImage.value = props.image
+})
+onMounted(() => {
+    tempHeight.value = props.height
+    tempWidth.value = props.width
+    tempTop.value = props.top
+    tempLeft.value = props.left
+    tempImage.value = props.image
+});
+const tempHeight = ref(0);
+const tempWidth = ref(0);
+const tempTop = ref(0);
+const tempLeft = ref(0);
+const tempImage = ref("");
 function onEditClick() {
     isEditMode.value = !isEditMode.value;
 }
@@ -14,15 +44,15 @@ function onDeleteClick() {
     console.log("Deleted!");
 }
 function eHandler(data) {
-    width.value = data.width;
-    height.value = data.height;
-    left.value = data.left;
-    top.value = data.top;
+    tempWidth.value = data.width;
+    tempHeight.value = data.height;
+    tempLeft.value = data.left;
+    tempTop.value = data.top;
 }
 </script>
 
 <template>
-    <vue-resizable class="draggable-wrapper" :width="250" :height="250" dragSelector=".draggable-text-wrapper"
+    <vue-resizable class="draggable-wrapper" :width="tempWidth" :height="tempHeight" dragSelector=".draggable-text-wrapper"
         :fit-parent="true" @mount="eHandler" @resize:move="eHandler" @resize:start="eHandler" @resize:end="eHandler"
         @drag:move="eHandler" @drag:start="eHandler" @drag:end="eHandler">
         <div class="draggable-text-wrapper"
