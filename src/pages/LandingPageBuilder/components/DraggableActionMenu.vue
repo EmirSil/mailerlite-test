@@ -51,7 +51,7 @@ const props = defineProps({
                     :class="{ 'text-action-item-wrapper': props.type === 'text' }">
                     <font-awesome-icon icon="fa fa-save" class="action-item-icon"
                         :class="{ 'text-action-item-icon': props.type === 'text' }" />
-                    <span style="margin-left: 4px;">Save!</span>
+                    <span class="save-text">Save!</span>
                 </div>
             </div>
         </transition>
@@ -103,5 +103,9 @@ const props = defineProps({
 
 .text-action-item-icon {
     color: black;
+}
+
+.save-text {
+    margin-left: 4px;
 }
 </style>

@@ -49,7 +49,7 @@ onMounted(() => {
         left: 260,
         width: 500,
         height: 120,
-        value: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut accumsan nisi. Fusce ullamcorper posuere risus, at molestie quam scelerisque et.`
+        value: `<h1>Hello!!</h1>`
     },
     {
         id: 1,
@@ -81,7 +81,6 @@ onMounted(() => {
     height: calc(100vh - 16px);
     position: relative;
     margin: 8px;
-    overflow: hidden;
 }
 
 

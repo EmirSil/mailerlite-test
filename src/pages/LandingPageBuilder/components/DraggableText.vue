@@ -2,6 +2,8 @@
 import { ref, watch, onMounted, nextTick } from "vue";
 import VueResizable from "vue-resizable";
 import DraggableActionMenu from './DraggableActionMenu.vue';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 
 const emit = defineEmits(['onClone', 'onDelete', 'onEdit', 'mousedown']);
 
@@ -45,11 +47,13 @@ function onCloneClick() {
 function onEditClick() {
     isEditMode.value = !isEditMode.value;
     dragSelector.value = isEditMode.value ? null : ".draggable-text-wrapper";
-    nextTick(() => {
-        textarea.value.focus();
-    });
-    emit('onEdit', { id: props.id, type: "text", value: tempText.value });
-
+    if (isEditMode.value) {
+        nextTick(() => {
+            textarea.value.focus();
+        });
+    } else {
+        emit('onEdit', { id: props.id, type: "text", value: tempText.value });
+    }
 }
 function onDeleteClick() {
     emit('onDelete', props.id);
@@ -72,8 +76,9 @@ function dragHandler(data) {
         :top="tempTop" :left="tempLeft" :dragSelector="dragSelector" :fit-parent="true" @resize:start="resizeHandler"
         @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
         <div class="draggable-text-wrapper">
-            <div v-show="!isEditMode" class="text-styling">{{ tempText }}</div>
-            <textarea ref="textarea" v-show="isEditMode" class="text-styling" v-model="tempText"></textarea>
+            <div @dblclick="onEditClick" v-if="!isEditMode" class="text-styling ql-editor" v-html="tempText"></div>
+            <QuillEditor style="padding: 0" toolbar="essential" contentType="html" ref="textarea" v-model:content="tempText"
+                v-else theme="bubble" />
             <DraggableActionMenu :textInEditMode="isEditMode" type="text" :interacted="interacted" @onEdit="onEditClick"
                 @onDelete="onDeleteClick" @onClone="onCloneClick" />
         </div>
@@ -86,11 +91,9 @@ function dragHandler(data) {
 
 .draggable-text-wrapper {
     height: 100%;
-    display: flex;
 }
 
 .text-styling {
-    font-size: 20px;
     font-family: "Arial";
     font-weight: 400;
     padding: 0;
@@ -99,5 +102,11 @@ function dragHandler(data) {
     overflow: auto;
     height: 100%;
     background: transparent;
+    border: transparent;
+}
+
+.text-styling * {
+    margin: 0;
+    padding: 0;
 }
 </style>

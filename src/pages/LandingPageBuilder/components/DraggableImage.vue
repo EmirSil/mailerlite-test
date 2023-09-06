@@ -79,8 +79,8 @@ function dragHandler(data) {
             <DraggableActionMenu :interacted="interacted" @onEdit="onEditClick" @onDelete="onDeleteClick"
                 @onClone="onCloneClick" />
         </div>
-        <Modal title="Select your image" v-model:visible="isEditMode" :okButton="okButtonConfig" modalClass="modal-wrapper"
-            :offsetTop="16" :width="'50%'">
+        <Modal title="Select your image" v-model:visible="isEditMode" :okButton="okButtonConfig"
+            :cancelButton="{ text: 'Cancel' }" modalClass="modal-wrapper" :offsetTop="16" :width="'50%'">
             <div class="container">
                 <div class="item" @click="onSelectImage(i)" :class="{ 'selected-item': selectedItem === i }"
                     v-for="i in images" :key="i"
