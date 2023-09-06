@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
 import VueResizable from "vue-resizable";
-const emit = defineEmits(['onClone', 'onDelete', 'onEdit']);
+import DraggableActionMenu from './DraggableActionMenu.vue';
+
+const emit = defineEmits(['onClone', 'onDelete', 'onEdit', 'mousedown']);
 
 const props = defineProps({
     height: Number,
@@ -9,7 +11,8 @@ const props = defineProps({
     top: Number,
     left: Number,
     text: String,
-    id: Number
+    id: Number,
+    interacted: Boolean
 })
 
 onMounted(() => {
@@ -56,18 +59,15 @@ function eHandler(data) {
 </script>
 
 <template>
-    <vue-resizable class="draggable-wrapper" :width="tempWidth" :height="tempHeight" :top="tempTop" :left="tempLeft"
-        :dragSelector="dragSelector" :fit-parent="true" @mount="eHandler" @resize:move="eHandler" @resize:start="eHandler"
-        @resize:end="eHandler" @drag:move="eHandler" @drag:start="eHandler" @drag:end="eHandler">
+    <vue-resizable class="draggable-wrapper" @mousedown="emit('mousedown')" :width="tempWidth" :height="tempHeight"
+        :top="tempTop" :left="tempLeft" :dragSelector="dragSelector" :fit-parent="true" @mount="eHandler"
+        @resize:move="eHandler" @resize:start="eHandler" @resize:end="eHandler" @drag:move="eHandler" @drag:start="eHandler"
+        @drag:end="eHandler">
         <div class="draggable-text-wrapper">
             <div v-show="!isEditMode" class="text-styling" v-html="tempText"></div>
             <textarea v-show="isEditMode" class="text-styling" v-model="tempText"></textarea>
-            <div
-                style="position: absolute; right: -50px; display: flex; flex-direction: column; justify-content: center; height: 100%;">
-                <font-awesome-icon @click="onCloneClick" icon="fa-solid fa-clone" style="margin-bottom: 8px;" />
-                <font-awesome-icon @click="onEditClick" icon="fa-solid fa-pencil" style="margin-bottom: 8px;" />
-                <font-awesome-icon @click="onDeleteClick" icon="fa-solid fa-trash" style="margin-bottom: 8px;" />
-            </div>
+            <DraggableActionMenu :interacted="interacted" @onEdit="onEditClick" @onDelete="onDeleteClick"
+                @onClone="onCloneClick" />
         </div>
     </vue-resizable>
 </template>
@@ -83,7 +83,7 @@ function eHandler(data) {
 }
 
 .text-styling {
-    font-size: 14px;
+    font-size: 20px;
     font-family: "Arial";
     font-weight: 400;
     padding: 0;

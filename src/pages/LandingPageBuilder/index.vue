@@ -5,7 +5,11 @@ import { ref, onMounted } from "vue";
 
 const draggableData = ref(null);
 const images = ref(["https://dummyimage.com/250x250/000/fff", "https://dummyimage.com/250x250/fff/000", "https://dummyimage.com/100x100/000/fff", "https://dummyimage.com/100x100/fff/000"]);
+const interactedDraggable = ref({});
 
+function onDraggableInteraction(draggable) {
+    interactedDraggable.value = draggable;
+}
 function onSave() {
     const dataJson = JSON.stringify(draggableData.value);
 }
@@ -45,9 +49,12 @@ onMounted(() => {
 
 <template>
     <div class="container">
-        <component @onClone="onClone" @onDelete="onDelete" :is="block.type === 'text' ? DraggableText : DraggableImage"
+        <component :interacted="interactedDraggable.id === block.id"
+            :class="{ 'interacted': interactedDraggable.id === block.id }" @mousedown="onDraggableInteraction(block)"
+            @onClone="onClone" @onDelete="onDelete" :is="block.type === 'text' ? DraggableText : DraggableImage"
             v-for="block in draggableData" :key="block.id" :height="block.height" :width="block.width" :top="block.top"
-            :left="block.left" :text="block.value" :id="block.id" :image="block.value" :images="images"></component>
+            :left="block.left" :text="block.value" :id="block.id" :image="block.value" :images="images">
+        </component>
         <button @click="onSave">Save</button>
     </div>
 </template>
@@ -56,5 +63,9 @@ onMounted(() => {
     height: calc(100vh - 16px);
     position: relative;
     margin: 8px;
+}
+
+.interacted {
+    border: 1px solid blue;
 }
 </style>
