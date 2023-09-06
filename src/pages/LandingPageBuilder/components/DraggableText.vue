@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, nextTick } from "vue";
 import VueResizable from "vue-resizable";
 import DraggableActionMenu from './DraggableActionMenu.vue';
 
@@ -38,12 +38,16 @@ const tempLeft = ref(0);
 const tempTop = ref(0);
 const tempText = ref("");
 const dragSelector = ref(".draggable-text-wrapper");
+const textarea = ref(null);
 function onCloneClick() {
-    emit('onClone', { type: "text", value: tempText.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value + 20, left: tempLeft.value + 20 });
+    emit('onClone', { type: "text", value: tempText.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value + 50, left: tempLeft.value + 50 });
 }
 function onEditClick() {
     isEditMode.value = !isEditMode.value;
     dragSelector.value = isEditMode.value ? null : ".draggable-text-wrapper";
+    nextTick(() => {
+        textarea.value.focus();
+    });
     emit('onEdit', { id: props.id, type: "text", value: tempText.value });
 
 }
@@ -61,7 +65,6 @@ function dragHandler(data) {
     tempTop.value = data.top;
     emit('onEdit', { id: props.id, type: "text", top: tempTop.value, left: tempLeft.value });
 }
-
 </script>
 
 <template>
@@ -69,10 +72,10 @@ function dragHandler(data) {
         :top="tempTop" :left="tempLeft" :dragSelector="dragSelector" :fit-parent="true" @resize:start="resizeHandler"
         @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
         <div class="draggable-text-wrapper">
-            <div v-show="!isEditMode" class="text-styling" v-html="tempText"></div>
-            <textarea v-show="isEditMode" class="text-styling" v-model="tempText"></textarea>
-            <DraggableActionMenu :interacted="interacted" @onEdit="onEditClick" @onDelete="onDeleteClick"
-                @onClone="onCloneClick" />
+            <div v-show="!isEditMode" class="text-styling">{{ tempText }}</div>
+            <textarea ref="textarea" v-show="isEditMode" class="text-styling" v-model="tempText"></textarea>
+            <DraggableActionMenu :textInEditMode="isEditMode" type="text" :interacted="interacted" @onEdit="onEditClick"
+                @onDelete="onDeleteClick" @onClone="onCloneClick" />
         </div>
     </vue-resizable>
 </template>
@@ -95,5 +98,6 @@ function dragHandler(data) {
     white-space: pre-wrap;
     overflow: auto;
     height: 100%;
+    background: transparent;
 }
 </style>

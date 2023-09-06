@@ -72,17 +72,19 @@ function dragHandler(data) {
 
 <template>
     <vue-resizable @mousedown="emit('mousedown')" class="draggable-wrapper" :width="tempWidth" :height="tempHeight"
-        :top="tempTop" :left="tempLeft" dragSelector=".draggable-text-wrapper" :fit-parent="true"
+        :top="tempTop" :left="tempLeft" dragSelector=".draggable-image-wrapper" :fit-parent="true"
         @resize:start="resizeHandler" @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
-        <div class="draggable-text-wrapper" :style="`background: url(${tempImage}); background-size: cover; background-position: center; background-repeat: no-repeat;
+        <div class="draggable-image-wrapper" :style="`background: url(${tempImage}); background-size: cover; background-position: center; background-repeat: no-repeat;
 `">
             <DraggableActionMenu :interacted="interacted" @onEdit="onEditClick" @onDelete="onDeleteClick"
                 @onClone="onCloneClick" />
         </div>
-        <Modal v-model:visible="isEditMode" :okButton="okButtonConfig">
+        <Modal title="Select your image" v-model:visible="isEditMode" :okButton="okButtonConfig" modalClass="modal-wrapper"
+            :offsetTop="16" :width="'50%'">
             <div class="container">
                 <div class="item" @click="onSelectImage(i)" :class="{ 'selected-item': selectedItem === i }"
-                    v-for="i in images" :key="i" :style="`background-image: url(${i});`">
+                    v-for="i in images" :key="i"
+                    :style="`background-image: url(${i});  background-size: cover; background-position: center; background-repeat: no-repeat;`">
                 </div>
             </div>
         </Modal>
@@ -116,10 +118,13 @@ function dragHandler(data) {
     border: 10px solid transparent;
 }
 
-.draggable-text-wrapper {
+.draggable-image-wrapper {
     height: -webkit-fill-available;
     display: flex;
-    border: 10px solid transparent;
+    border-radius: 4px;
+}
 
+.modal-vue3-content {
+    background-color: blue !important;
 }
 </style>
