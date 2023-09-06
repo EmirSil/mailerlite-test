@@ -9,14 +9,14 @@ const interactedDraggable = ref({});
 
 function onDraggableInteraction(draggable) {
     interactedDraggable.value = draggable;
+    draggableData.value = draggableData.value.filter(item => item.id !== draggable.id);
+    draggableData.value.push(draggable);
 }
 function onSave() {
     const dataJson = JSON.stringify(draggableData.value);
 }
 function onClone(data) {
-    const maxId = draggableData.value.reduce((arr, oId) => {
-        return (arr = arr > oId.id ? arr : oId.id);
-    });
+    const maxId = Math.max(...draggableData.value.map(o => o.id))
     data.id = maxId + 1;
     draggableData.value.push(data);
 }
@@ -49,7 +49,7 @@ onMounted(() => {
 
 <template>
     <div class="container">
-        <component :interacted="interactedDraggable.id === block.id"
+        <component :interacted="interactedDraggable.id === block.id" class="draggable-block"
             :class="{ 'interacted': interactedDraggable.id === block.id }" @mousedown="onDraggableInteraction(block)"
             @onClone="onClone" @onDelete="onDelete" :is="block.type === 'text' ? DraggableText : DraggableImage"
             v-for="block in draggableData" :key="block.id" :height="block.height" :width="block.width" :top="block.top"
@@ -63,6 +63,11 @@ onMounted(() => {
     height: calc(100vh - 16px);
     position: relative;
     margin: 8px;
+}
+
+
+.draggable-block {
+    border: 1px solid transparent;
 }
 
 .interacted {

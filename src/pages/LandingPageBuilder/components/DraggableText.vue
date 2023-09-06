@@ -92,27 +92,4 @@ function eHandler(data) {
     overflow: auto;
     height: 100%;
 }
-
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.position-absolute {
-    position: absolute;
-    top: 8px;
-    right: 0;
-}
-
-.clone {
-    right: 70px
-}
-
-.edit {
-    right: 40px
-}
-
-.trash {
-    right: 8px;
-    color: red;
-}
 </style>
