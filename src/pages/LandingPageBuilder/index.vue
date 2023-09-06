@@ -18,6 +18,7 @@ function onDraggableInteraction(draggable) {
 }
 function onSave() {
     const dataJson = JSON.stringify(draggableData.value);
+    interactedDraggable.value = {};
     console.log(dataJson);
 }
 function onEdit(data) {

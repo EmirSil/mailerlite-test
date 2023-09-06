@@ -77,7 +77,7 @@ function dragHandler(data) {
         @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
         <div class="draggable-text-wrapper">
             <div @dblclick="onEditClick" v-if="!isEditMode" class="text-styling ql-editor" v-html="tempText"></div>
-            <QuillEditor style="padding: 0" toolbar="essential" contentType="html" ref="textarea" v-model:content="tempText"
+            <QuillEditor style="padding: 0" toolbar="minimal" contentType="html" ref="textarea" v-model:content="tempText"
                 v-else theme="bubble" />
             <DraggableActionMenu :textInEditMode="isEditMode" type="text" :interacted="interacted" @onEdit="onEditClick"
                 @onDelete="onDeleteClick" @onClone="onCloneClick" />
