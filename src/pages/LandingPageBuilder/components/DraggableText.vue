@@ -20,21 +20,13 @@ onMounted(() => {
     tempText.value = props.text
 });
 
-watch(() => props.height, () => {
+watch(() => [props.height, props.width, props.top, props.left, props.text], () => {
     tempHeight.value = props.height
-});
-watch(() => props.width, () => {
     tempWidth.value = props.width
-})
-watch(() => props.top, () => {
     tempTop.value = props.top
-});
-watch(() => props.left, () => {
     tempLeft.value = props.left
-})
-watch(() => props.text, () => {
     tempText.value = props.text
-})
+});
 
 const isEditMode = ref(false);
 const tempWidth = ref(500);

@@ -4,10 +4,10 @@ import DraggableText from './components/DraggableText.vue';
 import { ref, onMounted } from "vue";
 
 const draggableData = ref(null);
+const images = ref(["https://dummyimage.com/250x250/000/fff", "https://dummyimage.com/250x250/fff/000", "https://dummyimage.com/100x100/000/fff", "https://dummyimage.com/100x100/fff/000"]);
 
 function onSave() {
     const dataJson = JSON.stringify(draggableData.value);
-    console.log(dataJson);
 }
 function onClone(data) {
     const maxId = draggableData.value.reduce((arr, oId) => {
@@ -18,7 +18,6 @@ function onClone(data) {
 }
 function onDelete(id) {
     const index = draggableData.value.findIndex(x => x.id === id);
-    console.log(id, index);
     draggableData.value.splice(index, 1);
 }
 
@@ -48,7 +47,7 @@ onMounted(() => {
     <div class="container">
         <component @onClone="onClone" @onDelete="onDelete" :is="block.type === 'text' ? DraggableText : DraggableImage"
             v-for="block in draggableData" :key="block.id" :height="block.height" :width="block.width" :top="block.top"
-            :left="block.left" :text="block.value" :id="block.id" :image="block.value"></component>
+            :left="block.left" :text="block.value" :id="block.id" :image="block.value" :images="images"></component>
         <button @click="onSave">Save</button>
     </div>
 </template>
