@@ -9,7 +9,8 @@ import {
   faPencil,
   faTrash,
   faClone,
+  faSave,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faPencil, faTrash, faArrowsUpDownLeftRight, faClone);
+library.add(faPencil, faTrash, faArrowsUpDownLeftRight, faClone, faSave);
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).mount('#app');

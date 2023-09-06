@@ -52,28 +52,30 @@ const selectedItem = ref("");
 
 function onSaveSelectedImage() {
     tempImage.value = selectedItem.value;
-    emit('onEdit', { id: props.id, type: "image", value: tempImage.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value, left: tempLeft.value });
+    emit('onEdit', { id: props.id, type: "image", value: tempImage.value });
     isEditMode.value = false;
 }
 function onSelectImage(image) {
     selectedItem.value = image;
 }
-function eHandler(data) {
+function resizeHandler(data) {
     tempWidth.value = data.width;
     tempHeight.value = data.height;
+    emit('onEdit', { id: props.id, type: "image", width: tempWidth.value, height: tempHeight.value });
+}
+function dragHandler(data) {
     tempLeft.value = data.left;
     tempTop.value = data.top;
-    emit('onEdit', { id: props.id, type: "image", value: tempImage.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value, left: tempLeft.value });
+    emit('onEdit', { id: props.id, type: "image", top: tempTop.value, left: tempLeft.value });
 }
 </script>
 
 <template>
     <vue-resizable @mousedown="emit('mousedown')" class="draggable-wrapper" :width="tempWidth" :height="tempHeight"
-        :top="tempTop" :left="tempLeft" dragSelector=".draggable-text-wrapper" :fit-parent="true" @mount="eHandler"
-        @resize:move="eHandler" @resize:start="eHandler" @resize:end="eHandler" @drag:move="eHandler" @drag:start="eHandler"
-        @drag:end="eHandler">
-        <div class="draggable-text-wrapper"
-            :style="`background: url(${tempImage}); background-size: cover; background-position: center;`">
+        :top="tempTop" :left="tempLeft" dragSelector=".draggable-text-wrapper" :fit-parent="true"
+        @resize:start="resizeHandler" @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
+        <div class="draggable-text-wrapper" :style="`background: url(${tempImage}); background-size: cover; background-position: center; background-repeat: no-repeat;
+`">
             <DraggableActionMenu :interacted="interacted" @onEdit="onEditClick" @onDelete="onDeleteClick"
                 @onClone="onCloneClick" />
         </div>
@@ -82,7 +84,6 @@ function eHandler(data) {
                 <div class="item" @click="onSelectImage(i)" :class="{ 'selected-item': selectedItem === i }"
                     v-for="i in images" :key="i" :style="`background-image: url(${i});`">
                 </div>
-                {{ selectedItem }}
             </div>
         </Modal>
     </vue-resizable>
@@ -95,6 +96,7 @@ function eHandler(data) {
     background-position: center;
     margin-bottom: 10px;
     border: 4px solid transparent;
+
 }
 
 .selected-item {
@@ -111,10 +113,13 @@ function eHandler(data) {
 
 .draggable-wrapper {
     position: absolute !important;
+    border: 10px solid transparent;
 }
 
 .draggable-text-wrapper {
-    height: 100%;
+    height: -webkit-fill-available;
     display: flex;
+    border: 10px solid transparent;
+
 }
 </style>

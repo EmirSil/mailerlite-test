@@ -30,8 +30,8 @@ const props = defineProps({
     <transition name="fade">
         <div v-if="interacted" class="action-menu-wrapper">
             <div v-for="item in actionItems" :key="item.name" @mouseenter="onIconHover(item.name)"
-                @mouseleave="onIconHover('')" class="action-item-wrapper">
-                <font-awesome-icon @click="item.action" :icon="item.icon" />
+                @mouseleave="onIconHover('')" @click="item.action" class="action-item-wrapper">
+                <font-awesome-icon :icon="item.icon" />
                 <transition name="fade">
                     <span v-show="hoveredIcon == item.name" class="action-item-text">{{ item.text }}</span>
                 </transition>
@@ -47,7 +47,6 @@ const props = defineProps({
     top: 8px;
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
 .action-item-wrapper {

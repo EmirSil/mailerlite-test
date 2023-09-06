@@ -39,30 +39,35 @@ const tempTop = ref(0);
 const tempText = ref("");
 const dragSelector = ref(".draggable-text-wrapper");
 function onCloneClick() {
-    emit('onClone', { type: "text", value: "lmao", width: tempWidth.value, height: tempHeight.value, top: tempTop.value + 20, left: tempLeft.value + 20 });
+    emit('onClone', { type: "text", value: tempText.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value + 20, left: tempLeft.value + 20 });
 }
 function onEditClick() {
     isEditMode.value = !isEditMode.value;
     dragSelector.value = isEditMode.value ? null : ".draggable-text-wrapper";
+    emit('onEdit', { id: props.id, type: "text", value: tempText.value });
+
 }
 function onDeleteClick() {
     emit('onDelete', props.id);
 }
-function eHandler(data) {
+
+function resizeHandler(data) {
     tempWidth.value = data.width;
     tempHeight.value = data.height;
+    emit('onEdit', { id: props.id, type: "text", width: tempWidth.value, height: tempHeight.value });
+}
+function dragHandler(data) {
     tempLeft.value = data.left;
     tempTop.value = data.top;
-    emit('onEdit', { id: props.id, type: "text", value: tempText.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value, left: tempLeft.value });
+    emit('onEdit', { id: props.id, type: "text", top: tempTop.value, left: tempLeft.value });
 }
 
 </script>
 
 <template>
     <vue-resizable class="draggable-wrapper" @mousedown="emit('mousedown')" :width="tempWidth" :height="tempHeight"
-        :top="tempTop" :left="tempLeft" :dragSelector="dragSelector" :fit-parent="true" @mount="eHandler"
-        @resize:move="eHandler" @resize:start="eHandler" @resize:end="eHandler" @drag:move="eHandler" @drag:start="eHandler"
-        @drag:end="eHandler">
+        :top="tempTop" :left="tempLeft" :dragSelector="dragSelector" :fit-parent="true" @resize:start="resizeHandler"
+        @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
         <div class="draggable-text-wrapper">
             <div v-show="!isEditMode" class="text-styling" v-html="tempText"></div>
             <textarea v-show="isEditMode" class="text-styling" v-model="tempText"></textarea>
@@ -74,7 +79,6 @@ function eHandler(data) {
 <style scoped>
 .draggable-wrapper {
     position: absolute !important;
-    border: 4px dashed #dedede;
 }
 
 .draggable-text-wrapper {
