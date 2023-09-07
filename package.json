@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest --dom"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -15,15 +16,18 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@vueup/vue-quill": "^1.2.0",
+    "happy-dom": "^6.0.4",
     "usemodal-vue3": "^0.3.7",
     "vue": "^3.3.4",
     "vue-resizable": "^2.1.7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/test-utils": "^2.4.1",
     "sass": "^1.66.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
+    "vitest": "^0.34.3",
     "vue-tsc": "^1.8.5"
   }
 }

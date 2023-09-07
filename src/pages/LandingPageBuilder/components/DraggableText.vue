@@ -25,11 +25,13 @@ onMounted(() => {
     tempText.value = props.text
 });
 
-watch(() => [props.height, props.width, props.top, props.left, props.text], () => {
+watch(() => [props.height, props.width, props.top, props.left], () => {
     tempHeight.value = props.height
     tempWidth.value = props.width
     tempTop.value = props.top
     tempLeft.value = props.left
+});
+watch(() => props.text, () => {
     tempText.value = props.text
 });
 
@@ -39,14 +41,14 @@ const tempHeight = ref(200);
 const tempLeft = ref(0);
 const tempTop = ref(0);
 const tempText = ref("");
-const dragSelector = ref(".draggable-text-wrapper");
+const dragSelector = ref(".text-inner-wrapper");
 const textarea = ref(null);
 function onCloneClick() {
     emit('onClone', { type: "text", value: tempText.value, width: tempWidth.value, height: tempHeight.value, top: tempTop.value + 50, left: tempLeft.value + 50 });
 }
 function onEditClick() {
     isEditMode.value = !isEditMode.value;
-    dragSelector.value = isEditMode.value ? null : ".draggable-text-wrapper";
+    dragSelector.value = isEditMode.value ? null : ".text-inner-wrapper";
     if (isEditMode.value) {
         nextTick(() => {
             textarea.value.focus();
@@ -72,11 +74,11 @@ function dragHandler(data) {
 </script>
 
 <template>
-    <vue-resizable class="draggable-wrapper" @mousedown="emit('mousedown')" :width="tempWidth" :height="tempHeight"
+    <vue-resizable class="draggable-text-wrapper" @mousedown="emit('mousedown')" :width="tempWidth" :height="tempHeight"
         :top="tempTop" :left="tempLeft" :dragSelector="dragSelector" :fit-parent="true" @resize:start="resizeHandler"
         @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
-        <div class="draggable-text-wrapper">
-            <div @dblclick="onEditClick" v-if="!isEditMode" class="text-styling ql-editor" v-html="tempText"></div>
+        <div class="text-inner-wrapper">
+            <div @dblclick="onEditClick" v-if="!isEditMode" class="ql-editor text-styling" v-html="tempText"></div>
             <QuillEditor style="padding: 0" toolbar="minimal" contentType="html" ref="textarea" v-model:content="tempText"
                 v-else theme="bubble" />
             <DraggableActionMenu :textInEditMode="isEditMode" type="text" :interacted="interacted" @onEdit="onEditClick"
@@ -85,11 +87,11 @@ function dragHandler(data) {
     </vue-resizable>
 </template>
 <style scoped>
-.draggable-wrapper {
+.draggable-text-wrapper {
     position: absolute !important;
 }
 
-.draggable-text-wrapper {
+.text-inner-wrapper {
     height: 100%;
 }
 
@@ -103,6 +105,7 @@ function dragHandler(data) {
     height: 100%;
     background: transparent;
     border: transparent;
+    cursor: pointer;
 }
 
 .text-styling * {

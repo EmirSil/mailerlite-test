@@ -28,8 +28,7 @@ function onEdit(data) {
         draggableData.value[index].left = data.left || data.left === 0 ? data.left : draggableData.value[index].left;
         draggableData.value[index].width = data.width || data.width === 0 ? data.width : draggableData.value[index].width;
         draggableData.value[index].height = data.height || data.height === 0 ? data.height : draggableData.value[index].height;
-        draggableData.value[index].value = data.value ? data.value : draggableData.value[index].value;
-
+        if (data.value) draggableData.value[index].value = data.value ? data.value : draggableData.value[index].value;
     }
 }
 function onClone(data) {

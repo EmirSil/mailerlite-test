@@ -71,10 +71,10 @@ function dragHandler(data) {
 </script>
 
 <template>
-    <vue-resizable @mousedown="emit('mousedown')" class="draggable-wrapper" :width="tempWidth" :height="tempHeight"
-        :top="tempTop" :left="tempLeft" dragSelector=".draggable-image-wrapper" :fit-parent="true"
-        @resize:start="resizeHandler" @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
-        <div class="draggable-image-wrapper" :style="`background: url(${tempImage}); background-size: cover; background-position: center; background-repeat: no-repeat;
+    <vue-resizable @mousedown="emit('mousedown')" class="draggable-image-wrapper" :width="tempWidth" :height="tempHeight"
+        :top="tempTop" :left="tempLeft" dragSelector=".image-inner-wrapper" :fit-parent="true" @resize:start="resizeHandler"
+        @resize:end="resizeHandler" @drag:start="dragHandler" @drag:end="dragHandler">
+        <div class="image-inner-wrapper" :style="`background: url(${tempImage}); background-size: cover; background-position: center; background-repeat: no-repeat;
 `">
             <DraggableActionMenu :interacted="interacted" @onEdit="onEditClick" @onDelete="onDeleteClick"
                 @onClone="onCloneClick" />
@@ -113,12 +113,12 @@ function dragHandler(data) {
 }
 
 
-.draggable-wrapper {
+.draggable-image-wrapper {
     position: absolute !important;
     border: 10px solid transparent;
 }
 
-.draggable-image-wrapper {
+.image-inner-wrapper {
     height: -webkit-fill-available;
     display: flex;
     border-radius: 4px;
